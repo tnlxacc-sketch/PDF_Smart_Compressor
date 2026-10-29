@@ -49,3 +49,10 @@
 - Synthetic 2-page scanned-JPEG PDF: 1,038,611 input bytes, **66.5% saved** with Balanced, browser result and gating verified. Synthetic 12-page invoice, malformed PDF, signature refusal and forbidden outbound network requests passed.
 - **Cannot guarantee** 10/30/50% on any arbitrary file. For scanned PDFs, lossy image changes can affect reading individual numerals and must NOT be certified as 100% accurate; manual page review is mandatory.
 - **Not yet production approved:** real 43-page ~33.54 MB corporate document, Thai invoices, Google Sites embed, Edge employee environment and three-mode real-world testing remain outstanding.
+
+### V4 Three-mode browser regression — 29/10/2026
+- [GitHub Actions Run 40829133715](https://github.com/tnlxacc-sketch/PDF_Smart_Compressor/actions/runs/40829133715): verified using synthetic scanned-JPEG PDF, fully browser-side.
+- High: **50.9%** actual saving vs 10% threshold; output permitted after validation.
+- Balanced: **66.5%** actual saving vs 30% threshold; output permitted after validation.
+- Small: **81.0%** actual saving vs 50% threshold; output permitted after validation.
+- These savings are **fixture-specific**, not a prediction for corporate PDFs. Lossy JPEG produces changed pixels and cannot certify scanned numerals to be exactly unchanged.
