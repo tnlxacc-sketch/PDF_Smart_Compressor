@@ -10,7 +10,7 @@ const t=String.raw`
     canvas.width=1100;canvas.height=1500;
     const c=canvas.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,1100,1500);
     const pixels=c.createImageData(1100,1500);let seed=19;
-    for(let k=0;k<pixels.data.length;k+=4){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const z=239+(seed%16);pixels.data[k]=z;pixels.data[k+1]=z;pixels.data[k+2]=z;pixels.data[k+3]=255;}
+    for(let k=0;k<pixels.data.length;k+=4){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const z=239+((seed>>>16)%16);pixels.data[k]=z;pixels.data[k+1]=z;pixels.data[k+2]=z;pixels.data[k+3]=255;}
     c.putImageData(pixels,0,0);
     c.fillStyle='#222';c.font='bold 27px sans-serif';c.fillText('SCAN PNG NO PDF TEXT',50,70);
     c.font='18px sans-serif';
