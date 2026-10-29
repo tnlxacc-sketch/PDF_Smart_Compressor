@@ -9,9 +9,9 @@ const t=String.raw`
     const canvas=document.createElement('canvas');
     canvas.width=1100;canvas.height=1500;
     const c=canvas.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,1100,1500);
-    for(let y=0;y<1500;y+=3)for(let x=0;x<1100;x+=3){
-      const z=239+(((Math.imul(x+1,374761393)^Math.imul(y+1,668265263))>>>0)%16);c.fillStyle='rgb('+z+','+z+','+z+')';c.fillRect(x,y,3,3);
-    }
+    const pixels=c.createImageData(1100,1500);let seed=19;
+    for(let k=0;k<pixels.data.length;k+=4){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const z=239+(seed%16);pixels.data[k]=z;pixels.data[k+1]=z;pixels.data[k+2]=z;pixels.data[k+3]=255;}
+    c.putImageData(pixels,0,0);
     c.fillStyle='#222';c.font='bold 27px sans-serif';c.fillText('SCAN PNG NO PDF TEXT',50,70);
     c.font='18px sans-serif';
     for(let i=0;i<42;i++)c.fillText('INVOICE '+i+' AMOUNT 1,250.50',50,110+i*31);
