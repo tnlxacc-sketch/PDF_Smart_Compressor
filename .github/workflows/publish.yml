@@ -1,4 +1,4 @@
-name: Verify and publish PDF Smart Compressor V5
+name: Verify and publish PDF Smart Compressor V5 UAT Mode
 on:
   push:
     branches: [main]
@@ -60,6 +60,8 @@ jobs:
           node --check src/app.mjs
           grep -q 'isSimpleImageOnlyScan' src/app.mjs
           grep -q 'RASTER_TRIALS' src/app.mjs
+      - name: Integrate local-only Full UAT mode
+        run: node compat/install-uat-mode.mjs
       - name: Install fixed-version dependencies
         run: npm install --ignore-scripts --no-fund
       - name: Install PDF.js browser-compatibility shim before build
@@ -85,6 +87,8 @@ jobs:
         run: node compat/extend-mode-tests.mjs
       - name: Verify V5 scanned PDF raster fallback in Chromium
         run: node compat/extend-v5-tests.mjs
+      - name: Add UAT report / privacy browser tests
+        run: node compat/extend-uat-tests.mjs
       - name: Real-browser regression tests
         run: npm run test:real
       - name: Full 29-case independent browser UAT
