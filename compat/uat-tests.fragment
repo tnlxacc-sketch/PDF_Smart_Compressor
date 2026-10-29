@@ -10,6 +10,7 @@
   await page.locator('#uat-review-codes').selectOption('NA');
   await page.locator('#uat-review-reader').selectOption('PASS');
   await page.locator('#uatSaveReview').click();
+  await page.locator('details.uat-cases').evaluate(el=>el.open=true);
   await page.locator('#uatcase-A01').selectOption('PASS');
   await page.locator('#uatSecurity').selectOption('NOT_CHECKED');
   const jsonAwait=page.waitForEvent('download');
