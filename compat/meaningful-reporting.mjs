@@ -20,3 +20,6 @@ let html=readFileSync(htmlPath,'utf8');
 html=swap(html,'<div id="savingLine" class="saving">ขนาดลดลง <b id="saving">—</b></div>','<div id="savingLine" class="saving">ผลการลดขนาด <b id="saving">—</b></div><p id="savingDetail" class="checks"></p>','HTML comparison');
 writeFileSync(htmlPath,html);
 console.log('V3 truthful reporting patch installed; saving >=1% is required to download');
+let smoke=readFileSync('tests/smoke.mjs','utf8');
+smoke=swap(smoke,'assert.match(js,/output\.length >= file\.size/);','assert.match(js,/meaningfulSaving/);\nassert.match(js,/saving >= 1\.0/);','security smoke test');
+writeFileSync('tests/smoke.mjs',smoke);
