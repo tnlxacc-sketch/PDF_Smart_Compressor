@@ -31,6 +31,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+      - name: Show truthful compression results and block negligible savings
+        run: node compat/meaningful-reporting.mjs
       - name: Install fixed-version dependencies
         run: npm install --ignore-scripts --no-fund
       - name: Install PDF.js browser-compatibility shim before build
