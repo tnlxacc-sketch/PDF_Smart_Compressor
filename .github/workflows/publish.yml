@@ -1,0 +1,56 @@
+name: Verify and publish PDF Smart Compressor V3
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'release/**'
+      - '.github/workflows/publish.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pdf-smart-compressor-pages
+  cancel-in-progress: true
+jobs:
+  verify-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify and unpack V3 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat release/SOURCE_ARCHIVE.b64.part0{1..5} | base64 --decode > /tmp/pdf-v3-source.tar.xz
+          echo "083aba509e54b1fd12a144df428fde2512ca666786c4bd61133e9c9c47f0669f  /tmp/pdf-v3-source.tar.xz" | sha256sum --check
+          tar -xJf /tmp/pdf-v3-source.tar.xz
+          test -f src/index.html
+          test -f src/app.mjs
+          test -f tests/real-browser.mjs
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install fixed-version dependencies
+        run: npm install --ignore-scripts --no-fund
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+      - name: Validate and build
+        run: npm run check && npm run test && npm run build
+      - name: Install Chromium for real PDF UAT
+        run: npx playwright install --with-deps chromium
+      - name: Real-browser regression tests
+        run: npm run test:real
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+  deploy:
+    needs: verify-build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
