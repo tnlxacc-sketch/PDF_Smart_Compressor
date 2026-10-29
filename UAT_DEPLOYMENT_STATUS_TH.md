@@ -33,3 +33,10 @@
 3. Perform corporate-PDF Edge/Chrome and iframe testing before approving Production.
 
 **Important:** Passing automated test fixtures does not certify exact semantic equivalence for arbitrary PDFs, nor prove the site's confidentiality in every runtime environment. Do not use confidential production PDFs until local security/UAT checks pass.
+
+## 29/10/2026: truthful size-comparison update
+- [Verified deploy](https://github.com/tnlxacc-sketch/PDF_Smart_Compressor/actions/runs/40827008920): build, tests, artifact upload and GitHub Pages deployment succeeded.
+- Real-world user test revealed **33.54 MB → 33.54 MB (0.0%)**, while the previous interface still offered download because of a negligible underlying byte difference.
+- New policy: show the actual saved bytes, show `ตรวจผ่าน แต่บีบอัดไม่ได้ผล` if reduction <1%, and hide download for insignificant savings.
+- **No new image-recompression algorithm was introduced.** For JPEG-scan-heavy PDFs, meaningful compression remains limited without sacrificing pixel-level identity. Do not claim the product currently matches V1 compression ratios.
+- Google Sites and corporate-document UAT remain pending. Do not represent the result as 100% accurate for arbitrary PDF files.
