@@ -3,7 +3,7 @@
 **Date:** 29/10/2026 (Asia/Bangkok)
 **Repository:** https://github.com/tnlxacc-sketch/PDF_Smart_Compressor
 **Production release:** NOT APPROVED
-**GitHub Pages:** NOT ENABLED (owner action required)
+**GitHub Pages:** DEPLOYED — https://tnlxacc-sketch.github.io/PDF_Smart_Compressor/ (verified from GitHub Actions deployment logs; direct external browser and Google Sites embed UAT still pending)
 
 ## GitHub Actions evidence
 - [Run 1 — failed real-browser UAT](https://github.com/tnlxacc-sketch/PDF_Smart_Compressor/actions/runs/40824790894): PDF.js used Map.getOrInsertComputed not available in test Chromium.
@@ -18,11 +18,18 @@
 - Headless Chromium real-document test: 12-page generated invoice PDF; before/after sizes and optional download; signed-marker rejection; malformed-PDF refusal
 - Test route instrumentation detected no outgoing document network requests
 
+## Successful deployment evidence
+- [Run 3, rerun attempt 2 — verified and deployed](https://github.com/tnlxacc-sketch/PDF_Smart_Compressor/actions/runs/40825041564): verify-build and deploy jobs both concluded success; `actions/deploy-pages` reports `Reported success!` and the environment URL `https://tnlxacc-sketch.github.io/PDF_Smart_Compressor/`.
+
 ## Still NOT verified
 - Real corporate scanned and Thai-language invoice PDFs in Edge/Chrome across employee devices
 - Corporate network restrictions or Google Sites embedding
 - Large-file performance and exhaustive PDF features
 - 100% identity for arbitrary PDF documents (not technically guaranteed)
 
-## Action required for GitHub Pages
-Open [Repository Settings → Pages](https://github.com/tnlxacc-sketch/PDF_Smart_Compressor/settings/pages) and set **Build and deployment → Source → GitHub Actions**. Save. Then rerun the latest GitHub Actions workflow. The site URL will be taken from the actual deployment output; **do not guess or distribute a URL before success.**
+## Google Sites next steps
+1. Open https://tnlxacc-sketch.github.io/PDF_Smart_Compressor/ in a user browser to check visual and functional load.
+2. In Google Sites choose Insert → Embed → URL and paste the confirmed deployment URL.
+3. Perform corporate-PDF Edge/Chrome and iframe testing before approving Production.
+
+**Important:** Passing automated test fixtures does not certify exact semantic equivalence for arbitrary PDFs, nor prove the site's confidentiality in every runtime environment. Do not use confidential production PDFs until local security/UAT checks pass.
