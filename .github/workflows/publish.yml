@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'release/**'
+      - 'compat/**'
       - '.github/workflows/publish.yml'
   workflow_dispatch:
 permissions:
