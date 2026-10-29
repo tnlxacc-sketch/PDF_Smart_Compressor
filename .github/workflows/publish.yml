@@ -67,6 +67,8 @@ jobs:
         run: npm run check && npm run test && npm run build
       - name: Install Chromium for real PDF UAT
         run: npx playwright install --with-deps chromium
+      - name: Extend scanned-JPEG UAT to High and Small profiles
+        run: node compat/extend-mode-tests.mjs
       - name: Real-browser regression tests
         run: npm run test:real
       - uses: actions/configure-pages@v5
