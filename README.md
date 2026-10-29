@@ -4,6 +4,12 @@
 
 A Thai-language PDF optimizer designed for embedding into Google Sites. PDF contents are processed locally in the user's browser. The deployed site does not use an upload API, external JavaScript CDN, analytics or a database.
 
+## Compression capability and safety limits
+- This version reorganizes PDF structure without recompressing JPEG scans. A 33 MB scanned PDF may remain ~33 MB; the program must **not** present a negligible gain as successful compression.
+- A release-time safety guard requires at least **1.0%** reduction before displaying the download action. The interface shows exact byte difference for very small gains.
+- Significant compression of already-compressed scanned pages generally requires changed image data (lossy recompression). That is NOT activated because the requested policy prioritizes original image/text integrity.
+- Passing PDF text/pixel checks at configured inspection resolution is NOT a mathematical 100% guarantee for arbitrary PDF documents.
+
 ## User interface
 1. Select or drag in a PDF (up to 80 MB).
 2. Select High Quality or Balanced. Small File is intentionally disabled pending evidence that its implementation preserves document information.
