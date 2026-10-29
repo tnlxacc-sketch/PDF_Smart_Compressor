@@ -1,7 +1,8 @@
 import {chromium} from 'playwright';
 import {PDFDocument,StandardFonts,PDFName, degrees} from 'pdf-lib';
 import {createServer} from 'node:http';
-import {readFile} from 'node:fs/promises';
+import {readFile,writeFile,unlink} from 'node:fs/promises';
+import {tmpdir} from 'node:os';
 import {join,resolve,extname,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
@@ -83,10 +84,13 @@ try{
     assert(await page.locator('#errorPanel').isVisible());
   });
   await tc('U10','Reject file above 80 MB',async()=>{
-    const tooLarge=Buffer.alloc(80*1024*1024+1,0);
-    await page.locator('#file').setInputFiles({name:'over80.pdf',mimeType:'application/pdf',buffer:tooLarge});
-    assert(await page.locator('#errorPanel').isVisible());
-    assert(await page.locator('#start').isDisabled());
+    const temp=join(tmpdir(),'pdf-uat-over80-'+process.pid+'.pdf');
+    try{
+      await writeFile(temp,Buffer.alloc(80*1024*1024+1,0));
+      await page.locator('#file').setInputFiles(temp);
+      assert(await page.locator('#errorPanel').isVisible());
+      assert(await page.locator('#start').isDisabled());
+    }finally{await unlink(temp).catch(()=>{});}
   });
   await tc('U11','Filename HTML injection not executed',async()=>{
     await select(await doc(1),'<img src=x onerror=alert(1)>.pdf');
