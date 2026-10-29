@@ -87,6 +87,8 @@ jobs:
         run: node compat/extend-v5-tests.mjs
       - name: Real-browser regression tests
         run: npm run test:real
+      - name: Full 29-case independent browser UAT
+        run: node compat/full-uat-battery.mjs
       - uses: actions/configure-pages@v5
         with:
           enablement: true
