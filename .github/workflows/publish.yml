@@ -33,6 +33,19 @@ jobs:
           node-version: '24'
       - name: Install fixed-version dependencies
         run: npm install --ignore-scripts --no-fund
+      - name: Install PDF.js browser-compatibility shim before build
+        run: |
+          node --input-type=module <<'JS'
+          import {readFileSync, writeFileSync} from 'node:fs';
+          const shim = readFileSync('compat/pdfjs-map-shim.mjs', 'utf8');
+          for (const path of [
+            'node_modules/pdfjs-dist/build/pdf.mjs',
+            'node_modules/pdfjs-dist/build/pdf.worker.mjs'
+          ]) {
+            const original = readFileSync(path, 'utf8');
+            writeFileSync(path, shim + '\n' + original);
+          }
+          JS
       - name: Audit dependencies
         run: npm audit --audit-level=high
       - name: Validate and build
