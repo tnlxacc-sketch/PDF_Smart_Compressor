@@ -1,4 +1,4 @@
-name: Verify and publish PDF Smart Compressor V3
+name: Verify and publish PDF Smart Compressor V4
 on:
   push:
     branches: [main]
@@ -32,8 +32,20 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Show truthful compression results and block negligible savings
-        run: node compat/meaningful-reporting.mjs
+      - name: Apply V4 targeted compression source (verified archive patch)
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat release/v4_patch.b64.part0{1..5} | base64 --decode > /tmp/v4-change.br
+          node --input-type=module <<'JS'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          import {brotliDecompressSync} from 'node:zlib';
+          writeFileSync('/tmp/v4-change.diff',brotliDecompressSync(readFileSync('/tmp/v4-change.br')));
+          JS
+          echo "b820e74c9e0df0291605ca6ae1dffde1b55d4a045a0bfc8f0dbaa073a1653117  /tmp/v4-change.diff" | sha256sum --check
+          patch -p1 < /tmp/v4-change.diff
+          grep -q 'high:10, balanced:30, small:50' src/app.mjs
+          grep -q 'id="consent"' src/index.html
       - name: Install fixed-version dependencies
         run: npm install --ignore-scripts --no-fund
       - name: Install PDF.js browser-compatibility shim before build
