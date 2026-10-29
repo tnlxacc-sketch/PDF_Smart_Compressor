@@ -55,6 +55,8 @@ jobs:
       - name: Real-browser regression tests
         run: npm run test:real
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v4
         with:
           path: dist
