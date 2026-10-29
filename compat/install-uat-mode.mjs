@@ -5,11 +5,11 @@ function changed(text,from,to,label){
 }
 let app=readFileSync('src/app.mjs','utf8');
 app=changed(app,"function pick(file) {\n  if (inProgress) return;\n  releaseResult();",
-  "function pick(file) {\n  if (inProgress) return;\n  releaseResult();\n  window.dispatchEvent(new Event('pdf-uat-file-changed'));",'file pick');
+  "function pick(file) {\n  if (inProgress) return;\n  releaseResult();\n  if (typeof window!=='undefined' && typeof window.dispatchEvent==='function' && typeof Event!=='undefined') window.dispatchEvent(new Event('pdf-uat-file-changed'));",'file pick');
 app=changed(app,"  const file = chosen;\n  releaseResult();",
   "  const file = chosen;\n  const uatStartedAt=performance.now();\n  releaseResult();",'timing');
 const successEvent=[
-"    window.dispatchEvent(new CustomEvent('pdf-uat-finished',{detail:{",
+"    if (typeof window!=='undefined' && typeof window.dispatchEvent==='function' && typeof CustomEvent!=='undefined') window.dispatchEvent(new CustomEvent('pdf-uat-finished',{detail:{",
 "      status:'VALIDATED',mode,target:goal,originalBytes:file.size,compressedBytes:output.length,",
 "      pages:oldPdf.numPages,savedPct:saving,consent,lossy,fullPageRaster,",
 "      jpegImagesChanged:changed,durationMs:Math.round(performance.now()-uatStartedAt),targetMet:metTarget",
@@ -18,7 +18,7 @@ const successEvent=[
 app=changed(app,"    $('result').hidden = false;",
   "    $('result').hidden = false;\n"+successEvent,'compression result');
 const rejectEvent=[
-"    window.dispatchEvent(new CustomEvent('pdf-uat-finished',{detail:{",
+"    if (typeof window!=='undefined' && typeof window.dispatchEvent==='function' && typeof CustomEvent!=='undefined') window.dispatchEvent(new CustomEvent('pdf-uat-finished',{detail:{",
 "      status:'REJECTED',mode:document.querySelector('input[name=quality]:checked')?.value||'balanced',",
 "      target:MODE_TARGET[document.querySelector('input[name=quality]:checked')?.value||'balanced'],",
 "      originalBytes:file.size,compressedBytes:null,pages:null,savedPct:null,consent:$('consent').checked,",
