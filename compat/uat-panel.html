@@ -1,0 +1,35 @@
+      <details id="uatPanel" class="uat-panel">
+        <summary>โหมด Full Business UAT — ตรวจเอกสารจริงและส่งออกผล (ไม่ส่งเนื้อหา PDF)</summary>
+        <p class="uat-privacy">เฉพาะเครื่องของผู้ใช้ · เก็บผลใน RAM ของหน้านี้เท่านั้น · ไม่บันทึก PDF, ชื่อไฟล์, ข้อความ, รูปภาพหรือ Content Hash ในรายงาน · Refresh แล้วผลหาย กรุณาส่งออกรายงานก่อนปิดหน้า</p>
+        <div class="uat-toolbar">
+          <label for="uatDocType">ประเภทไฟล์ทดสอบ <select id="uatDocType">
+            <option value="unknown">ยังไม่ระบุ</option><option value="scanned">สแกนภาพ</option>
+            <option value="selectable_text">ข้อความจาก SAP / Word / Excel</option>
+            <option value="ocr">PDF ที่มี OCR</option><option value="mixed">ภาพและข้อความผสม</option>
+          </select></label>
+        </div>
+        <p class="mode-note">วิธีทดสอบ: เลือก PDF → เลือกโหมดคมชัดสูง/สมดุล/ไฟล์เล็ก → ประมวลผลตามปกติ → ดาวน์โหลดและเปิดตรวจ → บันทึกผลตรวจด้วยคน → ทำซ้ำกับไฟล์อื่น → ส่งออกรายงาน โดยไม่มีข้อมูล PDF แนบไป</p>
+        <p id="uatNotice" role="status" class="uat-note">ยังไม่มีผลการทดสอบ PDF จริงในเซสชันนี้</p>
+        <div class="uat-table-wrap"><table class="uat-table"><thead><tr><th>ไฟล์</th><th>โหมด</th><th>เดิม (Byte)</th><th>ใหม่ (Byte)</th><th>ลดจริง</th><th>เป้าหมาย</th><th>ตรวจรับ</th></tr></thead><tbody id="uatRunRows"></tbody></table></div>
+        <div id="uatReview" class="uat-review" hidden>
+          <h3 id="uatReviewTitle">บันทึกผลตรวจเอกสารจริง</h3>
+          <label>เลือกผลลัพธ์ที่ต้องการตรวจ <select id="uatRunPicker"></select></label>
+          <div id="uatReviewChecks"></div>
+          <button id="uatSaveReview" type="button">บันทึกผลตรวจภาพและตัวเลข</button>
+          <p class="mode-note">โปรแกรมตรวจเนื้อหาภายในภาพว่าตัวเลขถูกต้องทุกตัวไม่ได้ ผู้ใช้ต้องเปิดไฟล์ PDF หลังบีบอัดและตรวจด้วยตนเองทุกหน้า</p>
+        </div>
+        <details class="uat-cases"><summary>Full Business UAT 25 กรณี — ผู้ทดสอบและ IT กำหนด Pass/Fail ด้วยตนเอง</summary>
+          <p class="mode-note">รวมผลตรวจจาก PDF หลายประเภทและหลายโหมดภายในเซสชันเดียว ไม่สามารถถือว่าตรวจครบทั้ง 25 กรณีจาก PDF ไฟล์เดียว</p>
+          <div class="uat-table-wrap"><table class="uat-table"><thead><tr><th>TC</th><th>กลุ่ม</th><th>สิ่งที่ตรวจ</th><th>ผล</th></tr></thead><tbody id="uatCaseRows"></tbody></table></div>
+        </details>
+        <label class="uat-security-label">ผลตรวจ Network โดย IT (ผู้ใช้ระบุเอง ไม่ใช่การตรวจอัตโนมัติ)
+          <select id="uatSecurity"><option value="NOT_CHECKED">ยังไม่ตรวจ</option><option value="PASS">IT ยืนยันผ่าน</option><option value="FAIL">ไม่ผ่าน</option></select>
+        </label>
+        <p id="uatSummary" class="uat-note"></p>
+        <div class="uat-actions">
+          <button id="uatExportJson" type="button" disabled>ส่งออกรายงาน UAT (.json)</button>
+          <button id="uatExportCsv" type="button" disabled>ส่งออกรายงาน Excel (.csv)</button>
+          <button id="uatClear" type="button" class="uat-clear">เริ่มชุด UAT ใหม่</button>
+        </div>
+        <p class="mode-note"><b>สถานะ Production ยังคง HOLD</b> จนกว่าจะตรวจ Google Sites, PDF จริง, Network และมีผู้อนุมัติ แม้ตัวอย่างทั้งหมดจะผ่านก็ตาม</p>
+      </details>
