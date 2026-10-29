@@ -56,3 +56,10 @@
 - Balanced: **66.5%** actual saving vs 30% threshold; output permitted after validation.
 - Small: **81.0%** actual saving vs 50% threshold; output permitted after validation.
 - These savings are **fixture-specific**, not a prediction for corporate PDFs. Lossy JPEG produces changed pixels and cannot certify scanned numerals to be exactly unchanged.
+
+## V5 — 29/10/2026 scanned-image fallback
+- [GitHub Actions verification and Pages deployment succeeded](https://github.com/tnlxacc-sketch/PDF_Smart_Compressor/actions/runs/40830923396).
+- Real Chromium regression for synthetic PNG/Flate scanned-only PDF: **73.2% size reduction in Balanced mode**, download appeared after checks; no detected external request in tested route.
+- Earlier JPEG synthetic fixtures: High 50.9%, Balanced 66.5%, Small 81.0% (fixture-dependent only).
+- V5 enables lowering DPI/JPEG of full pages only if every page has a raster-only drawing sequence with no Text Layer/OCR, annotation or signature, and the user explicitly consents to Lossy processing.
+- **UAT NOT COMPLETE**: actual user PDF (43 pages, 33.54 MB), Google Sites embedded browser, mobile and corporate network not verified. No universal promise of 10/30/50% or scanned digit accuracy after lossy changes.
