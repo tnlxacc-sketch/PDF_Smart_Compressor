@@ -7,12 +7,12 @@ let app=readFileSync('src/app.mjs','utf8');
 app=changed(app,"function pick(file) {\n  if (inProgress) return;\n  releaseResult();",
   "function pick(file) {\n  if (inProgress) return;\n  releaseResult();\n  if (typeof window!=='undefined' && typeof window.dispatchEvent==='function' && typeof Event!=='undefined') window.dispatchEvent(new Event('pdf-uat-file-changed'));",'file pick');
 app=changed(app,"  const file = chosen;\n  releaseResult();",
-  "  const file = chosen;\n  const uatStartedAt=performance.now();\n  releaseResult();",'timing');
+  "  const file = chosen;\n  const uatStartedAt=(typeof performance!=='undefined'?performance.now():Date.now());\n  releaseResult();",'timing');
 const successEvent=[
 "    if (typeof window!=='undefined' && typeof window.dispatchEvent==='function' && typeof CustomEvent!=='undefined') window.dispatchEvent(new CustomEvent('pdf-uat-finished',{detail:{",
 "      status:'VALIDATED',mode,target:goal,originalBytes:file.size,compressedBytes:output.length,",
 "      pages:oldPdf.numPages,savedPct:saving,consent,lossy,fullPageRaster,",
-"      jpegImagesChanged:changed,durationMs:Math.round(performance.now()-uatStartedAt),targetMet:metTarget",
+"      jpegImagesChanged:changed,durationMs:Math.round((typeof performance!=='undefined'?performance.now():Date.now())-uatStartedAt),targetMet:metTarget",
 "    }}));"
 ].join('\n');
 app=changed(app,"    $('result').hidden = false;",
@@ -23,7 +23,7 @@ const rejectEvent=[
 "      target:MODE_TARGET[document.querySelector('input[name=quality]:checked')?.value||'balanced'],",
 "      originalBytes:file.size,compressedBytes:null,pages:null,savedPct:null,consent:$('consent').checked,",
 "      lossy:false,fullPageRaster:false,jpegImagesChanged:0,",
-"      durationMs:Math.round(performance.now()-uatStartedAt),targetMet:false",
+"      durationMs:Math.round((typeof performance!=='undefined'?performance.now():Date.now())-uatStartedAt),targetMet:false",
 "    }}));"
 ].join('\n');
 app=changed(app,"    console.error('PDF processing refused:', err);",rejectEvent+"\n    console.error('PDF processing refused:', err);",'compression reject');
