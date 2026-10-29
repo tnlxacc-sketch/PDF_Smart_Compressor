@@ -10,7 +10,7 @@ const t=String.raw`
     canvas.width=1100;canvas.height=1500;
     const c=canvas.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,1100,1500);
     for(let y=0;y<1500;y+=3)for(let x=0;x<1100;x+=3){
-      const z=234+((x*13+y*7)%20);c.fillStyle='rgb('+z+','+z+','+z+')';c.fillRect(x,y,3,3);
+      const z=239+(((Math.imul(x+1,374761393)^Math.imul(y+1,668265263))>>>0)%16);c.fillStyle='rgb('+z+','+z+','+z+')';c.fillRect(x,y,3,3);
     }
     c.fillStyle='#222';c.font='bold 27px sans-serif';c.fillText('SCAN PNG NO PDF TEXT',50,70);
     c.font='18px sans-serif';
@@ -21,6 +21,7 @@ const t=String.raw`
   const pngImg=await pngDoc.embedPng(Buffer.from(pngB64,'base64'));
   for(let n=0;n<2;n++){const p=pngDoc.addPage([550,750]);p.drawImage(pngImg,{x:0,y:0,width:550,height:750});}
   const pngSource=Buffer.from(await pngDoc.save());
+  console.log('V5 PNG source length:',pngSource.length,'bytes');
   await page.locator('input#file').setInputFiles({name:'PNG_Scan.pdf',mimeType:'application/pdf',buffer:pngSource});
   await page.locator('input[value="balanced"]').check();
   await page.locator('#consent').check();
