@@ -1,0 +1,38 @@
+  // Full local UAT mode: evidence from actual scanner PDF, no file content in export.
+  const uatPanel=page.locator('#uatPanel');
+  await uatPanel.evaluate(el=>el.open=true);
+  assert((await page.locator('#uatCaseRows tr').count())===25,'missing 25 Business UAT controls');
+  assert((await page.locator('#uatRunRows tr').count())>=3,'compression engine did not feed local UAT results');
+  await page.locator('#uatDocType').selectOption('scanned');
+  await page.locator('#uat-review-pages').selectOption('PASS');
+  await page.locator('#uat-review-numbers').selectOption('PASS');
+  await page.locator('#uat-review-images').selectOption('PASS');
+  await page.locator('#uat-review-codes').selectOption('NA');
+  await page.locator('#uat-review-reader').selectOption('PASS');
+  await page.locator('#uatSaveReview').click();
+  await page.locator('#uatcase-A01').selectOption('PASS');
+  await page.locator('#uatSecurity').selectOption('NOT_CHECKED');
+  const jsonAwait=page.waitForEvent('download');
+  await page.locator('#uatExportJson').click();
+  const jsonDownload=await jsonAwait;
+  const jsonFile=await readFile(await jsonDownload.path(),'utf8');
+  const report=JSON.parse(jsonFile);
+  assert(report.format==='TNLX-PDF-UAT-LOCAL-v1','UAT JSON schema mismatched');
+  assert(report.runs.length>=3,'UAT result rows missing');
+  assert(report.businessCases.length===25,'25 Business UAT cases not exported');
+  assert(report.runs.at(-1).review.numbers==='PASS','human numbers review not recorded');
+  assert(report.runs.at(-1).targetMet===true,'last scan target not recorded');
+  assert(report.productionApproval==='HOLD_PENDING_CORPORATE_REVIEW','UAT should never auto approve Production');
+  assert(report.networkSecurity==='NOT_PROVEN_BY_THIS_REPORT','UAT should never claim complete security');
+  for(const secret of ['Invoice.pdf','Scan.pdf','ScannedPNG.pdf','INVOICE CHECK','AMOUNT 1,250.50','SCAN ONLY PNG / FLATE - TEST']){
+    assert(!jsonFile.includes(secret),'sensitive filename or contents leaked in UAT JSON: '+secret);
+  }
+  assert(report.privacy.filenameIncluded===false&&report.privacy.pdfTextIncluded===false&&report.privacy.pdfBytesIncluded===false,'UAT privacy manifest wrong');
+  const csvAwait=page.waitForEvent('download');
+  await page.locator('#uatExportCsv').click();
+  const csvDownload=await csvAwait;
+  const csvFile=await readFile(await csvDownload.path(),'utf8');
+  assert(csvFile.includes('BUSINESS')&&csvFile.includes('A01')&&csvFile.includes('PDF'),'missing UAT CSV records');
+  assert(!csvFile.includes('ScannedPNG.pdf')&&!csvFile.includes('INVOICE CHECK'),'sensitive content leaked in CSV');
+  assert(forbidden.length===0,'unexpected network requests during UAT export');
+  console.log('PASS: privacy-safe UAT Mode, 25 manual cases, redacted JSON/CSV, integrated engine data, Production HOLD');
