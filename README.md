@@ -31,3 +31,12 @@ The version-controlled V3 source snapshot is stored as five contiguous Base64 ch
 
 ## Google Sites
 After the Actions job **deploy** succeeds, use the URL shown on that job under `page_url` with Google Sites → Insert → Embed → URL. Do not embed `src/index.html` via a `file://` local path.
+
+## V5 (29/10/2026): DPI/JPEG adjustment for scanned-image PDFs
+- User-selected High/Balanced/Small targets are 10%/30%/50% minimum savings. **These are targets, not guaranteed results for every source.**
+- JPEG stream optimization remains available for supported RGB-DCT images.
+- **New:** if the PDF is an image-only scan with no PDF text layer or interactive/vector features, explicit Lossy consent allows locally rendering pages and lowering DPI/JPEG quality to compress scanned images even when the scanner stored them as PNG/Flate instead of JPEG.
+- V5 intentionally refuses whole-page raster fallback for selectable text/OCR layers, annotations, signatures, rotated pages, or unsupported drawing features so it will not silently destroy PDF searchability or interactive content.
+- Pixel values change in Lossy DPI mode: **not suitable to claim 100% correctness of digits contained only inside a scanned image**. Always visually review outputs and preserve originals.
+- No document upload API. Runtime scripts are hosted with the app and CSP denies outgoing browser API connections.
+- [Successful automated V5 test and deployment](https://github.com/tnlxacc-sketch/PDF_Smart_Compressor/actions/runs/40830923396): simulated PNG/Flate scan compressed 73.2% in Balanced; this **does not prove** the user's actual 43-page PDF will achieve 30%, or certify corporate UAT.
