@@ -40,3 +40,12 @@
 - New policy: show the actual saved bytes, show `ตรวจผ่าน แต่บีบอัดไม่ได้ผล` if reduction <1%, and hide download for insignificant savings.
 - **No new image-recompression algorithm was introduced.** For JPEG-scan-heavy PDFs, meaningful compression remains limited without sacrificing pixel-level identity. Do not claim the product currently matches V1 compression ratios.
 - Google Sites and corporate-document UAT remain pending. Do not represent the result as 100% accurate for arbitrary PDF files.
+
+## V4 — Quality reduction goals, 29/10/2026
+- [GitHub Actions V4 Build/Real PDF Test/Deploy successful](https://github.com/tnlxacc-sketch/PDF_Smart_Compressor/actions/runs/40828740435)
+- Target thresholds: High **>=10%**, Balanced **>=30%**, Small **>=50%**, measured using actual byte lengths. Missing target = **no download**.
+- Mechanism: try structural-only compression first; optionally recompress **embedded DeviceRGB/DCTDecode JPEG XObjects** when the user explicitly opts into image-quality loss. No whole-page rasterization, PDF text layer retained where present.
+- Safety: metadata/page/text preservation checks; exact pixel comparison for structural-only; similarity thresholds rather than exact pixel equality for lossy JPEG; still refuses signatures, forms, attachments, complex structures.
+- Synthetic 2-page scanned-JPEG PDF: 1,038,611 input bytes, **66.5% saved** with Balanced, browser result and gating verified. Synthetic 12-page invoice, malformed PDF, signature refusal and forbidden outbound network requests passed.
+- **Cannot guarantee** 10/30/50% on any arbitrary file. For scanned PDFs, lossy image changes can affect reading individual numerals and must NOT be certified as 100% accurate; manual page review is mandatory.
+- **Not yet production approved:** real 43-page ~33.54 MB corporate document, Thai invoices, Google Sites embed, Edge employee environment and three-mode real-world testing remain outstanding.
