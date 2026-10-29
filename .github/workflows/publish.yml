@@ -1,4 +1,4 @@
-name: Verify and publish PDF Smart Compressor V4
+name: Verify and publish PDF Smart Compressor V5
 on:
   push:
     branches: [main]
@@ -46,6 +46,20 @@ jobs:
           patch -p1 < /tmp/v4-change.diff
           grep -q 'high:10, balanced:30, small:50' src/app.mjs
           grep -q 'id="consent"' src/index.html
+      - name: Apply V5 image-only scan DPI fallback
+        shell: bash
+        run: |
+          set -euo pipefail
+          base64 --decode compat/v5-scanned-dpi.patch.br.b64 > /tmp/v5.patch.br
+          node --input-type=module <<'JS'
+          import {readFileSync,writeFileSync} from 'node:fs';
+          import {brotliDecompressSync} from 'node:zlib';
+          writeFileSync('/tmp/v5.patch',brotliDecompressSync(readFileSync('/tmp/v5.patch.br')));
+          JS
+          patch --fuzz=0 -p1 < /tmp/v5.patch
+          node --check src/app.mjs
+          grep -q 'isSimpleImageOnlyScan' src/app.mjs
+          grep -q 'RASTER_TRIALS' src/app.mjs
       - name: Install fixed-version dependencies
         run: npm install --ignore-scripts --no-fund
       - name: Install PDF.js browser-compatibility shim before build
@@ -69,6 +83,8 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Extend scanned-JPEG UAT to High and Small profiles
         run: node compat/extend-mode-tests.mjs
+      - name: Verify V5 scanned PDF raster fallback in Chromium
+        run: node compat/extend-v5-tests.mjs
       - name: Real-browser regression tests
         run: npm run test:real
       - uses: actions/configure-pages@v5
