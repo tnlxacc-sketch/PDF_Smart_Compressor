@@ -1,0 +1,15 @@
+.uat-panel{margin-top:22px;border:2px solid #567c8d;border-radius:12px;padding:17px;background:#f8fbfd;color:#27445b;font-size:13px;line-height:1.65}
+.uat-panel>summary{font-size:16px;font-weight:750;cursor:pointer}.uat-privacy{background:#e7f5ef;color:#235e49;border-radius:9px;padding:12px}
+.uat-toolbar,.uat-actions{display:flex;flex-wrap:wrap;gap:10px;margin:13px 0;align-items:center}
+.uat-toolbar label,.uat-review label,.uat-security-label{display:flex;flex-direction:column;gap:6px;font-weight:600}
+.uat-panel select{font:inherit;border:1px solid #a6bdc9;border-radius:7px;background:#fff;color:#263c50;padding:7px;max-width:100%}
+.uat-table-wrap{overflow-x:auto;max-width:100%;border-radius:9px;border:1px solid #d6e2ea}
+.uat-table{border-collapse:collapse;font-size:12px;width:100%;min-width:640px;background:white}
+.uat-table th,.uat-table td{padding:9px;text-align:left;border-bottom:1px solid #e5edf1}
+.uat-table th{background:#e5f0f5;font-weight:750;white-space:nowrap}
+.uat-review,.uat-cases{margin-top:15px;border:1px solid #cfdee6;padding:12px;border-radius:9px}
+.uat-review h3{margin:0 0 12px}.uat-review-item{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(130px,220px);gap:9px;align-items:center;margin:9px 0;font-weight:400!important}
+.uat-cases summary{font-weight:700;cursor:pointer}.uat-security-label{margin-top:15px}
+.uat-actions button{padding:10px 14px;font-size:13px}
+.uat-actions .uat-clear{background:#677b8c}.uat-note{background:#eaf2f8;border-radius:8px;padding:11px;color:#365a73}
+@media(max-width:650px){.uat-review-item{grid-template-columns:1fr}.uat-panel{padding:12px}.uat-actions button{width:100%}}
